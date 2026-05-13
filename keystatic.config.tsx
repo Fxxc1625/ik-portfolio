@@ -1,7 +1,7 @@
 import { config, fields, collection, singleton } from "@keystatic/core";
 
-// GitHub OAuth 키가 설정되면 github 모드, 없으면 local 모드
-const storage = process.env.KEYSTATIC_GITHUB_CLIENT_ID
+// NEXT_PUBLIC_ 접두사가 있어야 브라우저에서도 인식됨
+const storage = process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_CLIENT_ID
   ? ({
       kind: "github" as const,
       repo: { owner: "Fxxc1625", name: "ik-portfolio" },
