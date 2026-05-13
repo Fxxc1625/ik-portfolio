@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "label": "Home",
+      "href": "/",
+      "children": []
+    },
+    {
+      "label": "Music",
+      "href": "/music",
+      "children": [
+        { "label": "이인규블루스밴드", "href": "/music/ik-blues-band" },
+        { "label": "최항석과부기몬스터", "href": "/music/boogie-monster" },
+        { "label": "솔로 활동", "href": "/music/solo" }
+      ]
+    },
+    {
+      "label": "Visual Arts",
+      "href": "/visual-arts",
+      "children": []
+    },
+    {
+      "label": "Contact & EPK",
+      "href": "/contact",
+      "children": []
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import Navbar from "@/components/Navbar";
+import Navbar, { DEFAULT_NAV_ITEMS, type NavItem } from "@/components/Navbar";
+import { getReader } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: {
@@ -17,10 +18,34 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+/** Keystatic navigation 싱글톤 → Navbar props 형태로 변환 */
+async function getNavItems(): Promise<NavItem[]> {
+  try {
+    const reader = getReader();
+    const nav = await reader.singletons.navigation.read();
+    if (!nav?.items?.length) return DEFAULT_NAV_ITEMS;
+
+    // Keystatic reader가 반환하는 배열을 NavItem[] 으로 정규화
+    return nav.items.map((item) => ({
+      label: item.label,
+      href: item.href,
+      children: (item.children ?? []).map((c) => ({
+        label: c.label,
+        href: c.href,
+      })),
+    }));
+  } catch {
+    // 빌드 환경이나 GitHub 모드에서 읽기 실패 시 기본 메뉴 사용
+    return DEFAULT_NAV_ITEMS;
+  }
+}
+
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const navItems = await getNavItems();
+
   return (
     <>
-      <Navbar />
+      <Navbar items={navItems} />
       <main className="pt-16">{children}</main>
       <footer className="border-t border-surface-border mt-24">
         <div className="container-lg py-10 flex flex-col sm:flex-row justify-between items-center gap-4">

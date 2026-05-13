@@ -1,13 +1,14 @@
 import { config, fields, collection, singleton } from "@keystatic/core";
 
-// 개발 환경(로컬)이면 local 모드, 그 외(Vercel 배포)는 github 모드
-// process.env.NODE_ENV는 Next.js가 빌드 시 클라이언트 번들에 정적 삽입하므로 신뢰 가능
-const storage = process.env.NODE_ENV === "development"
-  ? ({ kind: "local" as const })
-  : ({
+// NEXT_PUBLIC_IS_VERCEL 은 next.config.ts 에서 빌드 시 정적 주입됨.
+// - Vercel 빌드/런타임: "1" (VERCEL 시스템 변수 존재)
+// - 로컬 dev/build: "" (VERCEL 없음 → local 모드, GitHub 자격증명 불필요)
+const storage = process.env.NEXT_PUBLIC_IS_VERCEL
+  ? ({
       kind: "github" as const,
       repo: { owner: "Fxxc1625", name: "ik-portfolio" },
-    });
+    })
+  : ({ kind: "local" as const });
 
 export default config({
   storage,
@@ -18,6 +19,7 @@ export default config({
       아티스트: ["artist", "ikBand", "boogieMonster", "setlist"],
       공연: ["concerts"],
       갤러리: ["gallery"],
+      사이트설정: ["navigation"],   // ← 메뉴/레이아웃 관리 탭
     },
   },
 
@@ -51,11 +53,18 @@ export default config({
         ),
         awards: fields.array(
           fields.object({
-            year: fields.integer({ label: "연도" }),
+            // ★ Fix 2: fields.integer → fields.text (천 단위 콤마 방지)
+            year: fields.text({ label: "연도 (예: 2023)" }),
             title: fields.text({ label: "수상명" }),
             org: fields.text({ label: "수여 기관" }),
           }),
-          { label: "수상 이력", itemLabel: (p) => p.fields.title.value ?? "" }
+          {
+            label: "수상 이력",
+            itemLabel: (p) =>
+              p.fields.title.value
+                ? `${p.fields.year.value} · ${p.fields.title.value}`
+                : "",
+          }
         ),
       },
     }),
@@ -66,13 +75,15 @@ export default config({
       path: "content/ik-blues-band",
       format: { data: "json" },
       schema: {
-        since: fields.integer({ label: "결성연도" }),
+        // ★ Fix 2: fields.integer → fields.text (천 단위 콤마 방지)
+        since: fields.text({ label: "결성연도 (예: 2019)" }),
         descKo: fields.text({ label: "소개 (한글)", multiline: true }),
         descEn: fields.text({ label: "소개 (영문)", multiline: true }),
         discography: fields.array(
           fields.object({
             title: fields.text({ label: "앨범명" }),
-            year: fields.integer({ label: "발매연도" }),
+            // ★ Fix 2: fields.integer → fields.text (천 단위 콤마 방지)
+            year: fields.text({ label: "발매연도 (예: 2022)" }),
             type: fields.text({ label: "종류 (EP / 정규앨범 / 싱글)" }),
             descKo: fields.text({ label: "설명 (한글)", multiline: true }),
             descEn: fields.text({ label: "설명 (영문)", multiline: true }),
@@ -81,7 +92,13 @@ export default config({
               { label: "트랙리스트", itemLabel: (p) => p.value ?? "" }
             ),
           }),
-          { label: "음반", itemLabel: (p) => p.fields.title.value ?? "" }
+          {
+            label: "음반",
+            itemLabel: (p) =>
+              p.fields.title.value
+                ? `${p.fields.year.value} · ${p.fields.title.value}`
+                : "",
+          }
         ),
       },
     }),
@@ -121,6 +138,36 @@ export default config({
             artist: fields.text({ label: "원곡 아티스트" }),
           }),
           { label: "커버 곡", itemLabel: (p) => p.fields.title.value ?? "" }
+        ),
+      },
+    }),
+
+    // ── 메뉴 / 레이아웃 설정 ────────────────────────────────────────
+    // ★ Fix 3: 동적 메뉴 관리 싱글톤
+    navigation: singleton({
+      label: "메뉴 / 레이아웃 설정",
+      path: "content/navigation",
+      format: { data: "json" },
+      schema: {
+        items: fields.array(
+          fields.object({
+            label: fields.text({ label: "메뉴 이름 (표시용)" }),
+            href: fields.text({ label: "경로 (예: /music)" }),
+            children: fields.array(
+              fields.object({
+                label: fields.text({ label: "하위 메뉴 이름" }),
+                href: fields.text({ label: "하위 경로 (예: /music/ik-blues-band)" }),
+              }),
+              {
+                label: "하위 메뉴 항목",
+                itemLabel: (p) => p.fields.label.value ?? "",
+              }
+            ),
+          }),
+          {
+            label: "메뉴 항목",
+            itemLabel: (p) => p.fields.label.value ?? "",
+          }
         ),
       },
     }),

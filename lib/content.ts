@@ -26,3 +26,7 @@ export type GalleryItem = Awaited<
     ReturnType<typeof getReader>["collections"]["gallery"]["read"]
   >
 >;
+
+export type NavigationData = Awaited<
+  ReturnType<ReturnType<typeof getReader>["singletons"]["navigation"]["read"]>
+>;

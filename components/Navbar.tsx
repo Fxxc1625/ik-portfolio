@@ -4,25 +4,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const navItems = [
-  { label: "Home", href: "/" },
+// ── 타입 정의 ───────────────────────────────────────────────────────────────
+export type NavChild = { label: string; href: string };
+export type NavItem  = { label: string; href: string; children: NavChild[] };
+
+// ── 기본 메뉴 (navigation.json 읽기 실패 시 폴백) ──────────────────────────
+export const DEFAULT_NAV_ITEMS: NavItem[] = [
+  { label: "Home",        href: "/",           children: [] },
   {
     label: "Music",
     href: "/music",
     children: [
-      { label: "이인규블루스밴드", href: "/music/ik-blues-band" },
+      { label: "이인규블루스밴드",   href: "/music/ik-blues-band" },
       { label: "최항석과부기몬스터", href: "/music/boogie-monster" },
-      { label: "솔로 활동", href: "/music/solo" },
+      { label: "솔로 활동",          href: "/music/solo" },
     ],
   },
-  { label: "Visual Arts", href: "/visual-arts" },
-  { label: "Contact & EPK", href: "/contact" },
+  { label: "Visual Arts", href: "/visual-arts", children: [] },
+  { label: "Contact & EPK", href: "/contact",   children: [] },
 ];
 
-export default function Navbar() {
-  const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [musicOpen, setMusicOpen] = useState(false);
+// ── Props ────────────────────────────────────────────────────────────────────
+interface NavbarProps {
+  /** (site)/layout.tsx 에서 Keystatic navigation 싱글톤을 읽어서 전달 */
+  items?: NavItem[];
+}
+
+export default function Navbar({ items = DEFAULT_NAV_ITEMS }: NavbarProps) {
+  const pathname  = usePathname();
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -32,9 +43,7 @@ export default function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* 로고 */}
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="text-gold font-serif text-lg tracking-widest font-bold">
-            IK
-          </span>
+          <span className="text-gold font-serif text-lg tracking-widest font-bold">IK</span>
           <span className="text-white/70 text-sm tracking-wider group-hover:text-white transition-colors">
             LEE IN-KYU
           </span>
@@ -42,21 +51,19 @@ export default function Navbar() {
 
         {/* 데스크탑 메뉴 */}
         <ul className="hidden md:flex items-center gap-1">
-          {navItems.map((item) =>
-            item.children ? (
-              <li key={item.label} className="relative group">
+          {items.map((item) =>
+            item.children && item.children.length > 0 ? (
+              <li key={item.href} className="relative group">
                 <button
                   className={`px-4 py-2 text-sm tracking-wide rounded transition-colors ${
-                    isActive(item.href)
-                      ? "text-gold"
-                      : "text-white/60 hover:text-white"
+                    isActive(item.href) ? "text-gold" : "text-white/60 hover:text-white"
                   }`}
                 >
                   {item.label}
                   <span className="ml-1 text-xs opacity-50">▾</span>
                 </button>
                 {/* 드롭다운 */}
-                <ul className="absolute top-full left-0 mt-1 w-48 bg-surface rounded-lg border border-surface-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1">
+                <ul className="absolute top-full left-0 mt-1 w-52 bg-surface rounded-lg border border-surface-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1">
                   {item.children.map((child) => (
                     <li key={child.href}>
                       <Link
@@ -74,13 +81,11 @@ export default function Navbar() {
                 </ul>
               </li>
             ) : (
-              <li key={item.label}>
+              <li key={item.href}>
                 <Link
                   href={item.href}
                   className={`block px-4 py-2 text-sm tracking-wide rounded transition-colors ${
-                    isActive(item.href)
-                      ? "text-gold"
-                      : "text-white/60 hover:text-white"
+                    isActive(item.href) ? "text-gold" : "text-white/60 hover:text-white"
                   }`}
                 >
                   {item.label}
@@ -105,17 +110,17 @@ export default function Navbar() {
       {/* 모바일 메뉴 */}
       {menuOpen && (
         <div className="md:hidden bg-surface border-t border-surface-border px-4 py-2 pb-4">
-          {navItems.map((item) =>
-            item.children ? (
-              <div key={item.label}>
+          {items.map((item, idx) =>
+            item.children && item.children.length > 0 ? (
+              <div key={item.href}>
                 <button
                   className="w-full text-left px-2 py-3 text-white/60 text-sm flex justify-between items-center"
-                  onClick={() => setMusicOpen(!musicOpen)}
+                  onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                 >
                   {item.label}
-                  <span className={`transition-transform ${musicOpen ? "rotate-180" : ""}`}>▾</span>
+                  <span className={`transition-transform ${openIndex === idx ? "rotate-180" : ""}`}>▾</span>
                 </button>
-                {musicOpen && (
+                {openIndex === idx && (
                   <div className="pl-4 border-l border-surface-border ml-2">
                     {item.children.map((child) => (
                       <Link
@@ -132,7 +137,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link
-                key={item.label}
+                key={item.href}
                 href={item.href}
                 className={`block px-2 py-3 text-sm transition-colors ${
                   isActive(item.href) ? "text-gold" : "text-white/60 hover:text-white"
