@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl *)",
+      "Bash(vercel ls *)",
+      "Bash(vercel whoami)",
+      "Bash(vercel env ls *)",
+      "Bash(pgrep *)"
+    ]
+  }
+}
