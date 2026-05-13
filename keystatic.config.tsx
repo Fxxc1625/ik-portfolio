@@ -1,12 +1,13 @@
 import { config, fields, collection, singleton } from "@keystatic/core";
 
-// GitHub App slug가 설정되면 github 모드, 없으면 local 모드
-const storage = process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG
-  ? ({
+// 개발 환경(로컬)이면 local 모드, 그 외(Vercel 배포)는 github 모드
+// process.env.NODE_ENV는 Next.js가 빌드 시 클라이언트 번들에 정적 삽입하므로 신뢰 가능
+const storage = process.env.NODE_ENV === "development"
+  ? ({ kind: "local" as const })
+  : ({
       kind: "github" as const,
       repo: { owner: "Fxxc1625", name: "ik-portfolio" },
-    })
-  : ({ kind: "local" as const });
+    });
 
 export default config({
   storage,
