@@ -1,0 +1,18 @@
+{
+  "venue": "군산 수제맥주&블루스페스티벌",
+  "location": "군산",
+  "type": "festival",
+  "dateDisplay": "2022~2025",
+  "dateStart": "2022",
+  "dateEnd": "2025",
+  "role": [
+    "performer"
+  ],
+  "roleDetail": "",
+  "audience": "300+",
+  "category": "국내",
+  "genre": "페스티벌",
+  "note": "",
+  "featuredBand": true,
+  "featuredPersonal": true
+}

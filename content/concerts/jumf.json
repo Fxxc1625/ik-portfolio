@@ -1,0 +1,18 @@
+{
+  "venue": "전주 얼티밋뮤직페스티벌 (JUMF)",
+  "location": "전주",
+  "type": "festival",
+  "dateDisplay": "2023~2024",
+  "dateStart": "2023",
+  "dateEnd": "2024",
+  "role": [
+    "performer"
+  ],
+  "roleDetail": "",
+  "audience": "",
+  "category": "국내",
+  "genre": "페스티벌",
+  "note": "",
+  "featuredBand": true,
+  "featuredPersonal": true
+}

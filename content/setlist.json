@@ -1,0 +1,29 @@
+{
+  "originalSongs": [
+    { "title": "귀향", "isTitle": true, "album": "Return (2019)" },
+    { "title": "Color Of Blood", "isTitle": false, "album": "Return (2019)" },
+    { "title": "Take Me Out", "isTitle": false, "album": "Return (2019)" },
+    { "title": "Aging", "isTitle": false, "album": "Return (2019)" },
+    { "title": "Blues City", "isTitle": true, "album": "Road To Blues (2022)" },
+    { "title": "The Road", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "주문", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "돈이드네", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "Bluesman", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "내일이오면", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "Think of you", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "모두가 사람", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "흘러가", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "그대", "isTitle": false, "album": "Road To Blues (2022)" },
+    { "title": "걸쳐", "isTitle": false, "album": "Road To Blues (2022)" }
+  ],
+  "coverSongs": [
+    { "title": "Mannish Boy", "artist": "Muddy Waters" },
+    { "title": "The Thrill Is Gone", "artist": "B.B. King" },
+    { "title": "Pride and Joy", "artist": "Stevie Ray Vaughan" },
+    { "title": "Crossroads", "artist": "Robert Johnson / Cream" },
+    { "title": "Hoochie Coochie Man", "artist": "Muddy Waters" },
+    { "title": "Red House", "artist": "Jimi Hendrix" },
+    { "title": "Boom Boom", "artist": "John Lee Hooker" },
+    { "title": "Born Under a Bad Sign", "artist": "Albert King" }
+  ]
+}

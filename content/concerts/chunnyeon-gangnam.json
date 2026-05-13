@@ -1,0 +1,19 @@
+{
+  "venue": "천년동안도 강남",
+  "location": "서울특별시 서초구",
+  "type": "series",
+  "dateDisplay": "2023~2024",
+  "dateStart": "2023",
+  "dateEnd": "2024",
+  "role": [
+    "performer",
+    "organizer"
+  ],
+  "roleDetail": "블루스 공연 기획·섭외·진행 전담 (1년간)",
+  "audience": "60+",
+  "category": "국내",
+  "genre": "공연",
+  "note": "정기 블루스 공연 시리즈 기획 및 운영",
+  "featuredBand": true,
+  "featuredPersonal": true
+}

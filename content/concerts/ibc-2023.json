@@ -1,0 +1,18 @@
+{
+  "venue": "International Blues Challenge",
+  "location": "Memphis, TN, USA",
+  "type": "festival",
+  "dateDisplay": "2023",
+  "dateStart": "2023",
+  "dateEnd": "",
+  "role": [
+    "performer"
+  ],
+  "roleDetail": "",
+  "audience": "",
+  "category": "해외",
+  "genre": "대회",
+  "note": "준결승 진출 — 전 세계 200여 팀 경쟁",
+  "featuredBand": false,
+  "featuredPersonal": true
+}

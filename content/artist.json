@@ -1,0 +1,37 @@
+{
+  "nameKo": "이인규",
+  "nameEn": "Lee In-Kyu",
+  "titleKo": "블루스 기타리스트 / 보컬리스트",
+  "titleEn": "Blues Guitarist / Vocalist",
+  "taglineKo": "한국 대표 블루스 아티스트",
+  "taglineEn": "Korea's Representative Blues Artist",
+  "bioKo": "이인규는 이인규블루스밴드의 보컬이자 기타리스트, 최항석과부기몬스터의 기타리스트로 활동하며 한국 블루스 씬을 대표하는 뮤지션입니다. '마인드바디앤소울'로 데뷔한 이래 국내 크고 작은 블루스 페스티벌 무대에 빠짐없이 참여해 왔습니다.\n\n미국 멤피스에서 매년 개최되는 세계 블루스 대회 '2023 International Blues Challenge'에 참가해 미국을 포함한 전 세계 200여 팀과 경쟁하며 준결승에 진출하는 쾌거를 이루었습니다.\n\n탁월한 연주력과 무대 장악력, 블루스에 대한 깊은 해석으로 주목받아 온 그는 최근 블루스 음악의 본질에 가까운 어쿠스틱 기타와 목소리 중심의 블루스에 집중하고 있습니다.",
+  "bioEn": "Lee In-Kyu is a vocalist and guitarist of IK Blues Band and guitarist of Choi Hang-Seok & Boogie Monster, establishing himself as a leading figure in the Korean blues scene. Since his debut with 'Mind Body & Soul', he has performed at blues festivals of all sizes across Korea.\n\nAt the '2023 International Blues Challenge' held annually in Memphis, USA, he achieved the remarkable feat of advancing to the semi-finals, competing against over 200 teams from the US and around the world.\n\nRecognized for his exceptional musicianship, stage presence, and deep interpretation of the blues, he has recently been focusing on acoustic guitar and voice-centered blues — the most essential form of the genre.",
+  "highlights": [
+    "2023 International Blues Challenge 준결승 진출 (전 세계 200여 팀 중)",
+    "이인규블루스밴드 리더 / 최항석과부기몬스터 기타리스트",
+    "한국블루스소사이어티 뮤지션 대표 (2025~현재)",
+    "서울블루스페스티벌, 군산수제맥주&블루스페스티벌, JUMF 등 주요 페스티벌 참가",
+    "전주인디뮤직어워드 수상",
+    "연간 100~200회 라이브 공연",
+    "광주MBC 정오의희망곡 4년 이상 고정 출연"
+  ],
+  "contact": {
+    "tel": "010-6696-3301",
+    "email": "mail@mbns.co.kr",
+    "instagram": "@mbns1625",
+    "youtube": "인규는음악을몰라요"
+  },
+  "awards": [
+    {
+      "year": 2023,
+      "title": "International Blues Challenge 준결승 진출",
+      "org": "The Blues Foundation (Memphis, TN, USA)"
+    },
+    {
+      "year": 2020,
+      "title": "전주인디뮤직어워드 — 올해의 포크/블루스 트랙",
+      "org": "전주인디뮤직어워드 (수상곡: 마인드바디앤소울 '귀향')"
+    }
+  ]
+}

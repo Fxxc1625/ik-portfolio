@@ -1,0 +1,19 @@
+{
+  "venue": "서울블루스페스티벌",
+  "location": "서울",
+  "type": "festival",
+  "dateDisplay": "2020~현재 (매년)",
+  "dateStart": "2020",
+  "dateEnd": "현재",
+  "role": [
+    "performer",
+    "emcee"
+  ],
+  "roleDetail": "매년 참가, 사회자 역임",
+  "audience": "500+",
+  "category": "국내",
+  "genre": "페스티벌",
+  "note": "2020년 이후 한 해도 빠지지 않고 참가",
+  "featuredBand": true,
+  "featuredPersonal": true
+}
