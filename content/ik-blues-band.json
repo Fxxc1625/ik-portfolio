@@ -1,0 +1,27 @@
+{
+  "since": 2019,
+  "descKo": "이인규블루스밴드는 블루스의 본질 — 진심과 날것의 감정 — 을 무대 위에서 가장 솔직하게 전달하는 것을 목표로 합니다. 어쿠스틱 블루스부터 일렉트릭 블루스까지, 다양한 스타일로 한국 블루스 씬을 이끌고 있습니다.",
+  "descEn": "IK Blues Band aims to deliver the essence of blues — raw emotion and heartfelt music — on stage. From acoustic to electric blues, the band leads the Korean blues scene with diverse styles.",
+  "discography": [
+    {
+      "title": "Return",
+      "year": 2019,
+      "type": "EP",
+      "descKo": "데뷔 EP. 귀향, Color of Blood 등 수록.",
+      "descEn": "Debut EP. Features 'Guihyang', 'Color of Blood', and more.",
+      "tracks": ["귀향 (Title)", "Color Of Blood", "Take Me Out", "Aging"]
+    },
+    {
+      "title": "Road To Blues",
+      "year": 2022,
+      "type": "정규앨범",
+      "descKo": "미국 현지 원테이크 레코딩. Blues City, The Road 등 수록.",
+      "descEn": "Recorded in the USA in one take. Features 'Blues City', 'The Road', and more.",
+      "tracks": [
+        "Blues City (Title)", "The Road", "주문", "돈이드네",
+        "Bluesman", "내일이오면", "Think of you", "모두가 사람",
+        "흘러가", "그대", "걸쳐"
+      ]
+    }
+  ]
+}

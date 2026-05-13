@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Gallery from "@/components/Gallery";
-import { ikBluesBand, artist } from "@/data/artist";
-import { concerts } from "@/data/concerts";
-import { setlist } from "@/data/setlist";
+import { getReader } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "이인규블루스밴드",
   description: "이인규블루스밴드 공식 포트폴리오 — 소개, 음반, 공연 이력, 갤러리",
 };
 
-// 갤러리 이미지 — public/images/ik-blues-band/ 에 파일을 넣으면 src를 수정하세요
 const galleryImages = [
   { src: "/images/placeholder.svg", alt: "라이브클럽 천년동안도 공연", caption: "라이브클럽 천년동안도" },
   { src: "/images/placeholder.svg", alt: "서울블루스페스티벌", caption: "서울블루스페스티벌" },
@@ -20,9 +17,19 @@ const galleryImages = [
   { src: "/images/placeholder.svg", alt: "Blues Alive 2026", caption: "Blues Alive 2026" },
 ];
 
-const bandConcerts = concerts.filter((c) => c.featuredBand);
+export default async function IKBluesBandPage() {
+  const reader = getReader();
+  const [artist, ikBand, setlist, concertSlugs] = await Promise.all([
+    reader.singletons.artist.read(),
+    reader.singletons.ikBand.read(),
+    reader.singletons.setlist.read(),
+    reader.collections.concerts.list(),
+  ]);
+  const allConcerts = await Promise.all(concertSlugs.map(s => reader.collections.concerts.read(s)));
+  const bandConcerts = allConcerts.filter(c => c?.featuredBand);
 
-export default function IKBluesBandPage() {
+  if (!artist || !ikBand || !setlist) return null;
+
   return (
     <>
       {/* ── Hero ── */}
@@ -31,7 +38,7 @@ export default function IKBluesBandPage() {
         <div className="container-lg relative z-10">
           <p className="text-blue-400 text-xs tracking-[0.4em] font-medium mb-4">MUSIC PROJECT 01</p>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-3">이인규블루스밴드</h1>
-          <p className="text-white/40 text-lg tracking-wider">IK Blues Band · {ikBluesBand.since}년~</p>
+          <p className="text-white/40 text-lg tracking-wider">IK Blues Band · {ikBand.since}년~</p>
           <div className="flex gap-3 mt-6 flex-wrap">
             <span className="tag-gold">보컬 & 기타 / Leader</span>
             <span className="tag">정규 1집 발매</span>
@@ -47,8 +54,8 @@ export default function IKBluesBandPage() {
             <div>
               <div className="gold-line" />
               <h2 className="section-title">About</h2>
-              <p className="text-white/70 text-sm leading-loose mt-6">{ikBluesBand.descKo}</p>
-              <p className="text-white/40 text-sm leading-loose mt-4 italic">{ikBluesBand.descEn}</p>
+              <p className="text-white/70 text-sm leading-loose mt-6">{ikBand.descKo}</p>
+              <p className="text-white/40 text-sm leading-loose mt-4 italic">{ikBand.descEn}</p>
             </div>
             <div>
               <h3 className="text-sm text-white/40 tracking-widest mb-6">ARTIST</h3>
@@ -70,7 +77,7 @@ export default function IKBluesBandPage() {
           <h2 className="section-title">음반</h2>
           <p className="section-subtitle">Discography</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {ikBluesBand.discography.map((album) => (
+            {ikBand.discography.map((album) => (
               <div key={album.title} className="card p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -140,22 +147,24 @@ export default function IKBluesBandPage() {
           <h2 className="section-title">공연 이력</h2>
           <p className="section-subtitle">Performance History</p>
           <div className="card divide-y divide-surface-border">
-            {bandConcerts.map((c) => (
-              <div key={c.id} className="concert-row px-6">
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-white font-medium text-sm">{c.venue}</span>
-                    {c.category === "해외" && <span className="tag-gold text-xs">해외</span>}
-                    {c.note && <span className="text-white/30 text-xs hidden md:inline">— {c.note}</span>}
+            {bandConcerts.map((c, i) =>
+              c ? (
+                <div key={i} className="concert-row px-6">
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-white font-medium text-sm">{c.venue}</span>
+                      {c.category === "해외" && <span className="tag-gold text-xs">해외</span>}
+                      {c.note && <span className="text-white/30 text-xs hidden md:inline">— {c.note}</span>}
+                    </div>
+                    <p className="text-white/40 text-xs mt-0.5">{c.location}</p>
                   </div>
-                  <p className="text-white/40 text-xs mt-0.5">{c.location}</p>
+                  <div className="flex items-center gap-3">
+                    <span className="tag">{c.genre}</span>
+                    <span className="text-white/50 text-sm whitespace-nowrap">{c.dateDisplay}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="tag">{c.genre}</span>
-                  <span className="text-white/50 text-sm whitespace-nowrap">{c.dateDisplay}</span>
-                </div>
-              </div>
-            ))}
+              ) : null
+            )}
           </div>
         </div>
       </section>
@@ -165,9 +174,6 @@ export default function IKBluesBandPage() {
         <div className="container-lg">
           <div className="gold-line" />
           <h2 className="section-title">갤러리</h2>
-          <p className="section-subtitle">
-            공연 사진은 <code className="text-white/30 text-xs">public/images/ik-blues-band/</code>에 추가하면 자동으로 표시됩니다.
-          </p>
           <Gallery images={galleryImages} layout="masonry" />
         </div>
       </section>

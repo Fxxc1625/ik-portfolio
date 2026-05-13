@@ -2,58 +2,40 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Gallery from "@/components/Gallery";
 import VideoEmbed from "@/components/VideoEmbed";
-import { artist } from "@/data/artist";
-import { concerts } from "@/data/concerts";
+import { getReader } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "솔로 활동",
   description: "이인규 솔로 아티스트 포트폴리오 — 아티스트 바이오, 수상, 공연 이력, 미디어",
 };
 
-const soloConcerts = concerts.filter((c) => c.featuredPersonal);
-
-// 솔로 활동 사진 — public/images/solo/ 에 파일 추가 후 src 수정
 const galleryImages = [
   { src: "/images/placeholder.svg", alt: "이인규 솔로 어쿠스틱", caption: "솔로 어쿠스틱 세트" },
   { src: "/images/placeholder.svg", alt: "미국 블루스시티카페 준결승", caption: "Blues City Cafe, Memphis" },
   { src: "/images/placeholder.svg", alt: "이인규 일렉 독사진", caption: "" },
   { src: "/images/placeholder.svg", alt: "제주 공연", caption: "제주" },
 ];
-
-// 유튜브 영상 — URL을 교체하세요
-const videos: { url: string; title: string }[] = [
-  // { url: "https://youtu.be/VIDEO_ID", title: "귀향 Live" },
-];
-
+const videos: { url: string; title: string }[] = [];
 const YOUTUBE_URL = "https://www.youtube.com/@인규는음악을몰라요";
 const INSTAGRAM_URL = "https://www.instagram.com/mbns1625";
-
-// 솔로 활동만의 고유 역할/이력
 const soloRoles = [
-  {
-    org: "한국블루스소사이어티",
-    role: "뮤지션 대표",
-    period: "2025~현재",
-    desc: "한국 블루스 씬의 뮤지션 대표로 활동",
-  },
-  {
-    org: "광주MBC 정오의희망곡",
-    role: "고정 출연",
-    period: "4년 이상",
-    desc: "라디오 고정 게스트 — 현재 진행 중",
-  },
-  {
-    org: "마인드바디앤소울 (Mind Body & Soul)",
-    role: "데뷔 프로젝트",
-    period: "2019",
-    desc: "솔로 데뷔 싱글 발매",
-  },
+  { org: "한국블루스소사이어티", role: "뮤지션 대표", period: "2025~현재", desc: "한국 블루스 씬의 뮤지션 대표로 활동" },
+  { org: "광주MBC 정오의희망곡", role: "고정 출연", period: "4년 이상", desc: "라디오 고정 게스트 — 현재 진행 중" },
+  { org: "마인드바디앤소울 (Mind Body & Soul)", role: "데뷔 프로젝트", period: "2019", desc: "솔로 데뷔 싱글 발매" },
 ];
 
-export default function SoloPage() {
+export default async function SoloPage() {
+  const reader = getReader();
+  const [artist, concertSlugs] = await Promise.all([
+    reader.singletons.artist.read(),
+    reader.collections.concerts.list(),
+  ]);
+  const allConcerts = await Promise.all(concertSlugs.map(s => reader.collections.concerts.read(s)));
+  const soloConcerts = allConcerts.filter(c => c?.featuredPersonal);
+  if (!artist) return null;
+
   return (
     <>
-      {/* ── Hero ── */}
       <section className="relative py-24 md:py-36 overflow-hidden bg-black">
         <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-black to-black pointer-events-none" />
         <div className="container-lg relative z-10">
@@ -70,7 +52,6 @@ export default function SoloPage() {
         </div>
       </section>
 
-      {/* ── Bio ── */}
       <section className="section bg-black">
         <div className="container-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -81,9 +62,7 @@ export default function SoloPage() {
                 {artist.bioKo.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
               </div>
               <div className="mt-6 pt-6 border-t border-surface-border">
-                <p className="text-white/35 text-xs leading-loose italic">
-                  {artist.bioEn.split("\n\n")[0]}
-                </p>
+                <p className="text-white/35 text-xs leading-loose italic">{artist.bioEn.split("\n\n")[0]}</p>
               </div>
             </div>
             <div>
@@ -96,32 +75,16 @@ export default function SoloPage() {
                   </div>
                 ))}
               </div>
-              {/* 소셜 */}
               <div className="mt-8 flex gap-3">
-                <a
-                  href={YOUTUBE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-red-400 hover:text-red-300 text-sm transition-colors"
-                >
-                  ▶ 유튜브
-                </a>
+                <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-red-400 hover:text-red-300 text-sm transition-colors">▶ 유튜브</a>
                 <span className="text-white/20">·</span>
-                <a
-                  href={INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-pink-400 hover:text-pink-300 text-sm transition-colors"
-                >
-                  ◈ @mbns1625
-                </a>
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-pink-400 hover:text-pink-300 text-sm transition-colors">◈ @mbns1625</a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 수상 ── */}
       <section className="section bg-surface/30">
         <div className="container-lg">
           <div className="gold-line" />
@@ -139,7 +102,6 @@ export default function SoloPage() {
         </div>
       </section>
 
-      {/* ── 솔로 활동 이력 ── */}
       <section className="section bg-black">
         <div className="container-lg">
           <div className="gold-line" />
@@ -160,51 +122,46 @@ export default function SoloPage() {
         </div>
       </section>
 
-      {/* ── 공연 이력 ── */}
       <section className="section bg-surface/30">
         <div className="container-lg">
           <div className="gold-line" />
           <h2 className="section-title">공연 이력</h2>
           <p className="section-subtitle">Performance History</p>
           <div className="card divide-y divide-surface-border">
-            {soloConcerts.map((c) => (
-              <div key={c.id} className="concert-row px-6">
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-white font-medium text-sm">{c.venue}</span>
-                    {c.category === "해외" && (
-                      <span className="tag-gold text-xs">해외</span>
-                    )}
+            {soloConcerts.map((c, i) =>
+              c ? (
+                <div key={i} className="concert-row px-6">
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-white font-medium text-sm">{c.venue}</span>
+                      {c.category === "해외" && <span className="tag-gold text-xs">해외</span>}
+                    </div>
+                    <p className="text-white/40 text-xs mt-0.5">{c.location}</p>
+                    {c.note && <p className="text-white/30 text-xs mt-0.5">{c.note}</p>}
                   </div>
-                  <p className="text-white/40 text-xs mt-0.5">{c.location}</p>
-                  {c.note && <p className="text-white/30 text-xs mt-0.5">{c.note}</p>}
+                  <div className="flex items-center gap-3">
+                    <span className="tag">{c.genre}</span>
+                    <span className="text-white/50 text-sm whitespace-nowrap">{c.dateDisplay}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="tag">{c.genre}</span>
-                  <span className="text-white/50 text-sm whitespace-nowrap">{c.dateDisplay}</span>
-                </div>
-              </div>
-            ))}
+              ) : null
+            )}
           </div>
         </div>
       </section>
 
-      {/* ── 영상 ── */}
       {videos.length > 0 && (
         <section className="section bg-black">
           <div className="container-lg">
             <div className="gold-line" />
             <h2 className="section-title">영상</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {videos.map((v, i) => (
-                <VideoEmbed key={i} url={v.url} title={v.title} />
-              ))}
+              {videos.map((v, i) => <VideoEmbed key={i} url={v.url} title={v.title} />)}
             </div>
           </div>
         </section>
       )}
 
-      {/* ── 갤러리 ── */}
       <section className="section bg-surface/30">
         <div className="container-lg">
           <div className="gold-line" />
@@ -213,14 +170,10 @@ export default function SoloPage() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
       <section className="py-16 bg-black text-center">
         <div className="container-lg">
           <p className="text-white/50 text-sm mb-6">솔로 공연 섭외 및 문의</p>
-          <Link
-            href="/contact"
-            className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-3 rounded-lg transition-colors text-sm"
-          >
+          <Link href="/contact" className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-3 rounded-lg transition-colors text-sm">
             섭외 문의 & EPK 다운로드 →
           </Link>
         </div>

@@ -14,7 +14,7 @@ export default config({
   ui: {
     brand: { name: "이인규 포트폴리오 관리자" },
     navigation: {
-      아티스트: ["artist", "setlist"],
+      아티스트: ["artist", "ikBand", "boogieMonster", "setlist"],
       공연: ["concerts"],
       갤러리: ["gallery"],
     },
@@ -56,6 +56,44 @@ export default config({
           }),
           { label: "수상 이력", itemLabel: (p) => p.fields.title.value ?? "" }
         ),
+      },
+    }),
+
+    // ── 이인규블루스밴드 ────────────────────────────────────────────
+    ikBand: singleton({
+      label: "이인규블루스밴드",
+      path: "content/ik-blues-band",
+      format: { data: "json" },
+      schema: {
+        since: fields.integer({ label: "결성연도" }),
+        descKo: fields.text({ label: "소개 (한글)", multiline: true }),
+        descEn: fields.text({ label: "소개 (영문)", multiline: true }),
+        discography: fields.array(
+          fields.object({
+            title: fields.text({ label: "앨범명" }),
+            year: fields.integer({ label: "발매연도" }),
+            type: fields.text({ label: "종류 (EP / 정규앨범 / 싱글)" }),
+            descKo: fields.text({ label: "설명 (한글)", multiline: true }),
+            descEn: fields.text({ label: "설명 (영문)", multiline: true }),
+            tracks: fields.array(
+              fields.text({ label: "트랙명" }),
+              { label: "트랙리스트", itemLabel: (p) => p.value ?? "" }
+            ),
+          }),
+          { label: "음반", itemLabel: (p) => p.fields.title.value ?? "" }
+        ),
+      },
+    }),
+
+    // ── 최항석과부기몬스터 ──────────────────────────────────────────
+    boogieMonster: singleton({
+      label: "최항석과부기몬스터",
+      path: "content/boogie-monster",
+      format: { data: "json" },
+      schema: {
+        descKo: fields.text({ label: "소개 (한글)", multiline: true }),
+        descEn: fields.text({ label: "소개 (영문)", multiline: true }),
+        ikRole: fields.text({ label: "이인규 역할" }),
       },
     }),
 
